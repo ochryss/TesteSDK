@@ -1,7 +1,7 @@
 package me.ochryss.minecraft
 
 import me.ochryss.minecraft.commands.CommandManager
-import me.ochryss.minecraft.features.VanishManager
+import me.ochryss.minecraft.managers.VanishManager
 import net.luckperms.api.*;
 import org.bukkit.Bukkit
 import org.bukkit.plugin.RegisteredServiceProvider

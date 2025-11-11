@@ -1,7 +1,6 @@
-package me.ochryss.minecraft.features
+package me.ochryss.minecraft.managers
 
 import me.ochryss.minecraft.ServerSDK
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player

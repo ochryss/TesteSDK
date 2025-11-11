@@ -2,7 +2,7 @@ package me.ochryss.minecraft.commands.dev
 
 import me.ochryss.minecraft.ServerSDK
 import me.ochryss.minecraft.commands.AbstractCommand
-import me.ochryss.minecraft.features.VanishManager
+import me.ochryss.minecraft.managers.VanishManager
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
