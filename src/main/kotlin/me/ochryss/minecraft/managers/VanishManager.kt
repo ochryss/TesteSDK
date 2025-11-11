@@ -1,6 +1,7 @@
 package me.ochryss.minecraft.managers
 
 import me.ochryss.minecraft.ServerSDK
+import me.ochryss.minecraft.utils.Components
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -13,7 +14,7 @@ class VanishManager(
 
     val updateService: () -> Unit = {
         for (vanished in playerList) {
-            vanished.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize("&bVocê está &linvisível&r&b! &8(/v)"))
+            vanished.sendActionBar(Components.ampersand("&bVocê está &linvisível&r&b! &8(/v)"))
 
             for (player in plugin.server.onlinePlayers) {
                 if (player.hasPermission(bypassPermissionNode)) {
