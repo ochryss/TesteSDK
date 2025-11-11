@@ -1,0 +1,4 @@
+name: ServerSDK
+version: '1.0-SNAPSHOT'
+main: me.ochryss.minecraft.ServerSDK
+api-version: '1.21'
