@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact name="copytoServer">
-    <output-path>$PROJECT_DIR$/../../../Minecraft/TesteServer/plugins</output-path>
-    <root id="root">
-      <element id="file-copy" path="$PROJECT_DIR$/build/serversdk.jar" />
-    </root>
-  </artifact>
-</component>
