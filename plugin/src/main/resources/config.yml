@@ -1,0 +1,16 @@
+tab:
+  header:
+    - ""
+    - "&6Servidor Teste"
+    - "Versão 1.21.8"
+    - ""
+  footer:
+    - "%teste%"
+
+  animations:
+    teste:
+      update-interval: 1
+      texts:
+        - "&7&6Teste&7		Teste		Teste"
+        - "&7Teste		&6Teste&7		Teste"
+        - "&7Teste		Teste		&6Teste&7"

@@ -1,0 +1,4 @@
+name: plugin
+version: '1.0'
+main: me.ochryss.servidorteste.plugin.MainPlugin
+api-version: '1.21'
