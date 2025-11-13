@@ -88,7 +88,7 @@ class PlayerListener(val plugin: MainPlugin) : Listener {
             )
         )
 
-        // VFX
+        // VFX & SFX
         player.world.playSound(player, Sound.ITEM_TOTEM_USE, 1.toFloat(), 1.toFloat())
         player.playEffect(EntityEffect.PROTECTED_FROM_DEATH)
 

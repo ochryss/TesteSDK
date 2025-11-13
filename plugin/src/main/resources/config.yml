@@ -9,7 +9,7 @@ tab:
 
   animations:
     teste:
-      update-interval: 1
+      update-interval: 1000
       texts:
         - "&7&6Teste&7		Teste		Teste"
         - "&7Teste		&6Teste&7		Teste"
