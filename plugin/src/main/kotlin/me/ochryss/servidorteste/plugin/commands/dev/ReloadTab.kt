@@ -11,7 +11,7 @@ class ReloadTab(plugin: MainPlugin) : AbstractCommand(plugin) {
     override val commandAliases: List<String> = listOf(
 
     )
-    override val permissionNode = "sdk.tabreload"
+    override val permissionNode = "sdk.reload"
     override val consoleEnabled = true
 
     override fun run(author: CommandSender, args: Array<out String>) {

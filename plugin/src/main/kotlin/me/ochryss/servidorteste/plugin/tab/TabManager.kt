@@ -2,56 +2,69 @@ package me.ochryss.servidorteste.plugin.tab
 
 import item.Components
 import me.ochryss.servidorteste.plugin.MainPlugin
+import me.ochryss.servidorteste.plugin.utils.PluginConfiguration
 import org.bukkit.Bukkit
-import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class TabManager(val plugin: MainPlugin) {
-    lateinit var config: FileConfiguration
+    companion object {
+        lateinit var config: YamlConfiguration
 
-    val tabUpdateRate = 250.0
-
-    lateinit var headerLines: List<String>
-    lateinit var footerLines: List<String>
-    lateinit var animationsIndexes: MutableMap<String, Double>
-
-    fun reloadConfig() {
-        plugin.reloadConfig()
-        loadConfig()
+        val PLACEHOLDER_REGEX = Regex("%(\\w+)%")
+        const val TAB_UPDATE_RATE = 250.0
     }
 
-    fun loadConfig() {
-        plugin.saveDefaultConfig()
-        config = plugin.config
+    var tabSections = listOf<List<String>>()
+    var animIndexes = mutableMapOf<String, Int>()
 
-        headerLines = config.getStringList("tab.header")
-        footerLines = config.getStringList("tab.footer")
+    fun reloadConfig() {
+        config = PluginConfiguration.loadConfig("tab.yml")
 
-        animationsIndexes = mutableMapOf()
+        tabSections = listOf(
+            config.getStringList("tab.header"),
+            config.getStringList("tab.footer")
+        )
+
+        animIndexes = mutableMapOf()
     }
 
     fun parseLine(line: String): String {
-        val placeholderRegex = Regex("%(\\w+)%")
-        val placeholder = placeholderRegex.find(line)
+        val placeholders = PLACEHOLDER_REGEX.findAll(line)
+        var result = line
 
-        if (placeholder?.groupValues[1] == null) return line
-        val name = placeholder.groupValues[1]
-        val path = "tab.animations.$name"
-        val configSection = config.getConfigurationSection(path)
-            ?: return line
+        if (placeholders.toList().isEmpty())
+            return line
 
-        val updateInterval: Double = (tabUpdateRate / configSection.getInt("update-interval"))
-        val texts = configSection.getStringList("texts")
+        for (anim in placeholders) {
+            result = result.replace(anim.value, parsePlaceholder(anim.groupValues[1]))
+        }
 
-        var textIndex = (animationsIndexes[name] ?: 0.0)
-        if (textIndex.toInt() >= texts.size)
-            textIndex = 0.0
+        return result
+    }
 
-        val result = texts[textIndex.toInt()] ?: line
+    fun parsePlaceholder(name: String): String {
+        val fallback = "%$name%"
+        val path = "animations.$name"
 
-        animationsIndexes[name] = textIndex + (updateInterval)
+        val animation = config.getConfigurationSection(path)
+            ?: return fallback
+
+        val updateInterval = (TAB_UPDATE_RATE / animation.getInt("update-interval"))
+        var textIndex = ((animIndexes[name] ?: 0) * updateInterval).toInt()
+        val texts = animation.getStringList("texts")
+
+        // Loops through the texts
+        if (textIndex >= texts.size) {
+            textIndex = 0
+            animIndexes[name] = 0
+        }
+
+        val result = texts[textIndex] ?: fallback
+
+        animIndexes[name] = (animIndexes[name] ?: 0) + 1
 
         return result.replace("\t", "   ")
     }
@@ -64,12 +77,12 @@ class TabManager(val plugin: MainPlugin) {
         val header = Components.builder()
         val footer = Components.builder()
 
-        for (line in headerLines) {
-            header.addAmpersand(parseLine(line))
+        tabSections[0].forEach {
+            header.addAmpersand(parseLine(it))
         }
 
-        for (line in footerLines) {
-            footer.addAmpersand(parseLine(line))
+        tabSections[1].forEach {
+            footer.addAmpersand(parseLine(it))
         }
 
         player.sendPlayerListHeaderAndFooter(
@@ -80,6 +93,6 @@ class TabManager(val plugin: MainPlugin) {
 
     fun startService() {
         Executors.newSingleThreadScheduledExecutor()
-            .scheduleAtFixedRate(::updateTab, 0L, tabUpdateRate.toLong(), TimeUnit.MILLISECONDS)
+            .scheduleAtFixedRate(::updateTab, 0L, TAB_UPDATE_RATE.toLong(), TimeUnit.MILLISECONDS)
     }
 }

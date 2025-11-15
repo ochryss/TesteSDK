@@ -4,6 +4,8 @@ import me.ochryss.servidorteste.plugin.MainPlugin
 import item.Components
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class VanishManager(
     val plugin: MainPlugin
@@ -26,7 +28,8 @@ class VanishManager(
     }
 
     fun runService() {
-        Bukkit.getScheduler().runTaskTimer(plugin, updateService, 5, 5)
+        Executors.newSingleThreadScheduledExecutor()
+            .scheduleAtFixedRate(updateService, 0L, 1L, TimeUnit.SECONDS)
     }
 
     fun addPlayer(player: Player) {
